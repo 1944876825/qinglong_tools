@@ -15,10 +15,12 @@ abstract class BaseRequest {
   String url() {
     Uri uri;
     var pathStr = path();
-    if (path().endsWith(("/"))) {
-      pathStr = "${path()}$pathParams";
-    } else {
-      pathStr = "${path()}/$pathParams";
+    if (pathParams.isNotEmpty) {
+      if (path().endsWith(("/"))) {
+        pathStr = "${path()}$pathParams";
+      } else {
+        pathStr = "${path()}/$pathParams";
+      }
     }
     if (useHttps) {
       uri = Uri.https(baseUrl(), pathStr, params);

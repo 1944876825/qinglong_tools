@@ -13,13 +13,17 @@ class Http {
     return _instance!;
   }
 
+  late String token;
+  void setToken(String token) {
+    this.token = token;
+  }
+
   Future fire(BaseRequest request) async {
     HttpResponse? response;
     Object? error;
     try {
       if (request.needLogin()) {
-        request.addHeader("Authorization",
-            "Bearer eyJhbGciOiJIUzM4NCIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoid05zQ0JxbHdTeDNCQW11bzZxR3FJU05FUzRTR09OT3l4ZzlXaUhCX250S2xrRUg2N21jNm9UeGx5RzJmN0JhNG0xejE1eURiQ3pqMkl0Q25keTVtSzk3Njh4YnAtTCIsImlhdCI6MTcwMzc1OTM4OSwiZXhwIjoxNzA1NDg3Mzg5fQ.-VnxxCEjAfASDqx6qiIovwYr_-ZLaUhF4TIUqgGR0aTA83aWhhIGCvrNjZJgoZpg");
+        request.addHeader("Authorization", "Bearer $token");
       }
       response = await send(request);
     } on HttpError catch (e) {
