@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:qinglong_tools/model/user_model.dart';
-import 'package:qinglong_tools/pages/home_page.dart';
+import 'package:get/get.dart';
+import 'package:qinglong_tools/pages/login/login_controller.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -16,8 +15,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    username = TextEditingController();
-    password = TextEditingController();
+    username = TextEditingController(text: 'admins');
+    password = TextEditingController(text: '.bs1229.');
     super.initState();
   }
 
@@ -69,44 +68,40 @@ class _LoginPageState extends State<LoginPage> {
             _buildInput('账号', username),
             _buildInput('密码', password, obscureText: true),
             const SizedBox(height: 20),
-            Consumer<UserModel>(builder: (context, model, child) {
-              if (model.isLogin) {
-                FilledButton(
+            GetBuilder<LoginController>(
+              builder: (loginController) {
+                if (loginController.isLogin.value) {
+                  return FilledButton(
+                    onPressed: () {
+                      Get.toNamed('/home');
+                    },
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                            Theme.of(context).primaryColor)),
+                    child: const Text(
+                      '进入',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  );
+                }
+                if (loginController.loading.value) {
+                  return const CircularProgressIndicator();
+                }
+                return FilledButton(
                   onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const HomePage(),
-                      ),
-                    );
+                    loginController.setUser(username.text, password.text);
+                    loginController.login();
                   },
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
                           Theme.of(context).primaryColor)),
                   child: const Text(
-                    '进入',
+                    '登录',
                     style: TextStyle(color: Colors.white),
                   ),
                 );
-              }
-              if (model.loading) {
-                return const CircularProgressIndicator();
-              }
-              return FilledButton(
-                onPressed: () {
-                  Provider.of<UserModel>(context, listen: false)
-                      .setUser(username.text, password.text);
-                  Provider.of<UserModel>(context, listen: false).login();
-                },
-                style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(
-                        Theme.of(context).primaryColor)),
-                child: const Text(
-                  '登录',
-                  style: TextStyle(color: Colors.white),
-                ),
-              );
-            }),
+              },
+            ),
           ],
         ),
       ),

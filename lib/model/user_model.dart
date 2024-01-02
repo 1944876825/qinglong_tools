@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:qinglong_tools/db/cache.dart';
 
 import '../http/core/http.dart';
 import '../http/request/user_request.dart';
@@ -44,6 +45,8 @@ class UserModel with ChangeNotifier {
       LoginModel res = LoginModel.fromJson(value);
       setToken(res.token);
       Http.getInstance().setToken(res.token);
+      Cache.getInstance()
+          .setStringList('UserModel', [username, password, res.token]);
       setLogin(true);
     } else {
       debugPrint(baseModel.message);

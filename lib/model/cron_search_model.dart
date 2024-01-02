@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:qinglong_tools/http/core/http_error.dart';
 import 'package:qinglong_tools/model/work_model.dart';
 
 import '../http/core/http.dart';
 import '../http/request/work_request.dart';
 import 'base_model.dart';
 
-class CronSearchModel with ChangeNotifier {
+class CronSearchModel extends GetxController {
   List<WorkModel>? data;
   int total;
 
@@ -22,26 +24,34 @@ class CronSearchModel with ChangeNotifier {
     );
   }
 
-  void update(CronSearchModel cronSearchData) {
+  void toUpdate(CronSearchModel cronSearchData) {
     data = cronSearchData.data;
     total = cronSearchData.total;
-    notifyListeners();
+    update();
   }
 
-  void getCronSearchData() {
+  void clear() {
+    total = 0;
+    data?.clear();
+    update();
+  }
+
+  Future<void> getCronSearchData() async {
     try {
       CronSearch cronSearch = CronSearch();
       cronSearch
           .addParams('searchValue', '')
           .addParams('page', 1)
           .addParams('size', 20);
-      Http.getInstance().fire(cronSearch).then((res) {
-        CronSearchModel cron = CronSearchModel.fromJson(res);
-        debugPrint(cron.total.toString());
-        if (cron.total > 0) {
-          update(cron);
-        }
-      });
+      var value = await Http.getInstance().fire(cronSearch);
+      if (value is NeedLogin) {
+        return;
+      }
+      CronSearchModel cron = CronSearchModel.fromJson(value);
+      debugPrint(cron.total.toString());
+      if (cron.total > 0) {
+        toUpdate(cron);
+      }
     } catch (e) {
       debugPrint("_getWorkData error $e");
     }

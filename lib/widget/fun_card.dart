@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../pages/work_page.dart';
+import '../pages/work/work_page.dart';
 
 class FunCard extends StatelessWidget {
   final IconData funIcon;

@@ -1,34 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:qinglong_tools/model/base_model.dart';
+import 'package:qinglong_tools/model/work_model.dart';
 
-import '../http/core/http.dart';
-import '../http/request/work_request.dart';
+import '../../http/core/http.dart';
+import '../../http/request/work_request.dart';
 
 enum AddOrWorkType {
   add,
   edit,
 }
 
-class AddOrWorkPage extends StatefulWidget {
+class AddOrEditPage extends StatefulWidget {
   final AddOrWorkType type;
-  const AddOrWorkPage({super.key, this.type = AddOrWorkType.add});
+  const AddOrEditPage({super.key, this.type = AddOrWorkType.add});
 
   @override
-  State<AddOrWorkPage> createState() => _AddOrWorkPageState();
+  State<AddOrEditPage> createState() => _AddOrEditPageState();
 }
 
-class _AddOrWorkPageState extends State<AddOrWorkPage> {
+class _AddOrEditPageState extends State<AddOrEditPage> {
   late TextEditingController name;
   late TextEditingController command;
   late TextEditingController schedule;
   @override
   void initState() {
-    // 添加
-    if (widget.type == AddOrWorkType.add) {
-      name = TextEditingController();
-      command = TextEditingController();
-      schedule = TextEditingController();
+    WorkModel? workData;
+    Map<String, dynamic>? arguments = Get.arguments;
+    var work = arguments?['workData'];
+    if (work != null) {
+      workData = work as WorkModel;
     }
+    name = TextEditingController(text: workData?.name);
+    command = TextEditingController(text: workData?.command);
+    schedule = TextEditingController(text: workData?.schedule);
+
     super.initState();
   }
 
@@ -121,7 +127,7 @@ class _AddOrWorkPageState extends State<AddOrWorkPage> {
         Container(
           padding: const EdgeInsets.only(left: 10, right: 10),
           decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            borderRadius: BorderRadius.all(Radius.circular(4.0)),
             color: Colors.white,
           ),
           child: TextField(

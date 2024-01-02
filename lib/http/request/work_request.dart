@@ -20,6 +20,24 @@ class CronRun extends BaseRequest {
   }
 }
 
+// 停止运行
+class CronStop extends BaseRequest {
+  @override
+  HttpMethod httpMethod() {
+    return HttpMethod.put;
+  }
+
+  @override
+  bool needLogin() {
+    return true;
+  }
+
+  @override
+  String path() {
+    return '/api/crons/stop';
+  }
+}
+
 // 搜索
 class CronSearch extends BaseRequest {
   @override

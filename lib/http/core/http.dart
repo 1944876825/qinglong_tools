@@ -1,4 +1,5 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:qinglong_tools/http/core/http_adapter.dart';
 
 import '../request/base_request.dart';
@@ -16,6 +17,11 @@ class Http {
   late String token;
   void setToken(String token) {
     this.token = token;
+  }
+
+  late BuildContext context;
+  void setContext(BuildContext context) {
+    this.context = context;
   }
 
   Future fire(BaseRequest request) async {
@@ -43,6 +49,8 @@ class Http {
         return result;
       case 401:
         debugPrint('NeedLogin');
+
+        Get.offNamed('/login');
         return NeedLogin();
       default:
         throw HttpError(status ?? 404, result.toString(), data: result);

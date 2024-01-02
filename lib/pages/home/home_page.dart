@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
+import 'package:qinglong_tools/pages/login/login_page.dart';
 
-import '../model/theme_model.dart';
-import '../widget/fun_card.dart';
+import '../../db/cache.dart';
+import '../../http/core/http.dart';
+import '../../widget/fun_card.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,6 +14,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    Cache.preInit().then((value) {
+      _init(context);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +54,8 @@ class _HomePageState extends State<HomePage> {
           ),
           IconButton(
             onPressed: () {
-              Provider.of<ThemeModel>(context, listen: false).reverse();
+              Get.changeThemeMode(
+                  Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
             },
             icon: Icon(
               Icons.light_mode,
@@ -65,5 +76,23 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
+  }
+
+  void _init(BuildContext context) {
+    try {
+      Http.getInstance().setContext(context);
+      List<String>? userModel = Cache.getInstance().getStringList('UserModel');
+      if (userModel != null && userModel.isNotEmpty) {
+        // UserModel userProvider = Provider.of<UserModel>(context, listen: false);
+        // userProvider.setToken(userModel[2]);
+        Http.getInstance().setToken(userModel[2]);
+        // userProvider.setLogin(true);
+        // userProvider.setUser(userModel[0], userModel[1]);
+      } else {
+        Get.to(() => const LoginPage());
+      }
+    } catch (e) {
+      debugPrint('_init error: $e');
+    }
   }
 }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:qinglong_tools/widget/work_log.dart';
 
 import '../http/core/http.dart';
 import '../http/request/work_request.dart';
 import '../model/base_model.dart';
 import '../model/work_model.dart';
-import '../pages/add_edit_work_page.dart';
 
 class ScriptControl extends StatefulWidget {
   final WorkModel workData;
@@ -49,12 +49,25 @@ class _ScriptControlState extends State<ScriptControl> {
             BaseModel baseModel = BaseModel.fromJson(value);
             if (baseModel.code == 200) {
               _workFunCardData[0].status = 0;
+              Get.snackbar('提示', '运行成功', colorText: Colors.black);
               debugPrint('运行成功');
             } else {
+              Get.snackbar('提示', '运行失败');
               debugPrint('运行失败');
             }
           } else {
-            _workFunCardData[0].status = 1;
+            CronStop cronStop = CronStop();
+            cronStop.setData('[${widget.workData.id}]');
+            var value = await Http.getInstance().fire(cronStop);
+            BaseModel baseModel = BaseModel.fromJson(value);
+            if (baseModel.code == 200) {
+              _workFunCardData[0].status = 1;
+              Get.snackbar('提示', '停止成功', colorText: Colors.black);
+              debugPrint('停止成功');
+            } else {
+              Get.snackbar('提示', '停止失败');
+              debugPrint('停止失败');
+            }
           }
           setState(() {});
         },
@@ -93,13 +106,9 @@ class _ScriptControlState extends State<ScriptControl> {
           ),
         ],
         action: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  const AddOrWorkPage(type: AddOrWorkType.edit),
-            ),
-          );
+          Get.toNamed('/edit_work', arguments: {
+            'workData': widget.workData,
+          });
         },
       ),
       WorkFunCardModel(
@@ -119,8 +128,10 @@ class _ScriptControlState extends State<ScriptControl> {
           var value = await Http.getInstance().fire(cronDel);
           BaseModel res = BaseModel.fromJson(value);
           if (res.code == 200) {
+            Get.snackbar('提示', '删除成功', colorText: Colors.black);
             debugPrint('删除成功');
           } else {
+            Get.snackbar('提示', '删除失败');
             debugPrint('删除失败');
           }
         },
@@ -153,8 +164,10 @@ class _ScriptControlState extends State<ScriptControl> {
             BaseModel baseModel = BaseModel.fromJson(value);
             if (baseModel.code == 200) {
               _workFunCardData[4].status = 1;
+              Get.snackbar('提示', '禁用成功', colorText: Colors.black);
               debugPrint('禁用成功');
             } else {
+              Get.snackbar('提示', '禁用失败');
               debugPrint('禁用失败');
             }
           } else {
@@ -164,8 +177,10 @@ class _ScriptControlState extends State<ScriptControl> {
             BaseModel baseModel = BaseModel.fromJson(value);
             if (baseModel.code == 200) {
               _workFunCardData[4].status = 0;
+              Get.snackbar('提示', '启用成功', colorText: Colors.black);
               debugPrint('启用成功');
             } else {
+              Get.snackbar('提示', '启用失败');
               debugPrint('启用失败');
             }
           }
@@ -200,8 +215,10 @@ class _ScriptControlState extends State<ScriptControl> {
               BaseModel baseModel = BaseModel.fromJson(value);
               if (baseModel.code == 200) {
                 _workFunCardData[5].status = 1;
+                Get.snackbar('提示', '置顶成功', colorText: Colors.black);
                 debugPrint('置顶成功');
               } else {
+                Get.snackbar('提示', '置顶失败');
                 debugPrint('置顶失败');
               }
             } else {
@@ -211,8 +228,10 @@ class _ScriptControlState extends State<ScriptControl> {
               BaseModel baseModel = BaseModel.fromJson(value);
               if (baseModel.code == 200) {
                 _workFunCardData[5].status = 0;
+                Get.snackbar('提示', '取消置顶成功', colorText: Colors.black);
                 debugPrint('取消置顶成功');
               } else {
+                Get.snackbar('提示', '取消置顶失败');
                 debugPrint('取消置顶失败');
               }
             }
