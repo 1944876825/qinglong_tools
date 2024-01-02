@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:qinglong_tools/pages/login/login_page.dart';
 
 import '../../db/cache.dart';
 import '../../http/core/http.dart';
@@ -80,16 +79,13 @@ class _HomePageState extends State<HomePage> {
 
   void _init(BuildContext context) {
     try {
-      Http.getInstance().setContext(context);
       List<String>? userModel = Cache.getInstance().getStringList('UserModel');
-      if (userModel != null && userModel.isNotEmpty) {
-        // UserModel userProvider = Provider.of<UserModel>(context, listen: false);
-        // userProvider.setToken(userModel[2]);
+      if (userModel != null &&
+          userModel.isNotEmpty &&
+          userModel[2].isNotEmpty) {
         Http.getInstance().setToken(userModel[2]);
-        // userProvider.setLogin(true);
-        // userProvider.setUser(userModel[0], userModel[1]);
       } else {
-        Get.to(() => const LoginPage());
+        Get.offAllNamed('/login');
       }
     } catch (e) {
       debugPrint('_init error: $e');

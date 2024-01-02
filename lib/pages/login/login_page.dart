@@ -10,13 +10,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  late TextEditingController username;
-  late TextEditingController password;
+  var loginController = Get.put(LoginController());
 
   @override
   void initState() {
-    username = TextEditingController(text: 'admins');
-    password = TextEditingController(text: '.bs1229.');
     super.initState();
   }
 
@@ -24,16 +21,6 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // leading: IconButton(
-        //   onPressed: () {
-        //     Navigator.pop(context);
-        //   },
-        //   icon: Icon(
-        //     Icons.arrow_back_ios,
-        //     color: Theme.of(context).primaryColor,
-        //     size: 16,
-        //   ),
-        // ),
         backgroundColor: Colors.transparent,
         title: Text(
           '登录',
@@ -43,37 +30,20 @@ class _LoginPageState extends State<LoginPage> {
             color: Theme.of(context).primaryColor,
           ),
         ),
-        // actions: [
-        //   TextButton(
-        //     onPressed: () {
-        //       // Navigator.push(
-        //       //   context,
-        //       //   MaterialPageRoute(
-        //       //     builder: (context) => const AddOrWorkPage(),
-        //       //   ),
-        //       // );
-        //     },
-        //     icon: Icon(
-        //       Icons.add,
-        //       color: Theme.of(context).primaryColor,
-        //       size: 24,
-        //     ),
-        //   ),
-        // ],
       ),
       body: Container(
         padding: const EdgeInsets.only(left: 15, right: 15),
         child: Column(
           children: [
-            _buildInput('账号', username),
-            _buildInput('密码', password, obscureText: true),
+            _buildInput('账号', loginController.username),
+            _buildInput('密码', loginController.password, obscureText: true),
             const SizedBox(height: 20),
             GetBuilder<LoginController>(
               builder: (loginController) {
                 if (loginController.isLogin.value) {
                   return FilledButton(
                     onPressed: () {
-                      Get.toNamed('/home');
+                      Get.offAllNamed('/home');
                     },
                     style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(
@@ -85,11 +55,11 @@ class _LoginPageState extends State<LoginPage> {
                   );
                 }
                 if (loginController.loading.value) {
-                  return const CircularProgressIndicator();
+                  return CircularProgressIndicator(
+                      color: Theme.of(context).primaryColor);
                 }
                 return FilledButton(
                   onPressed: () {
-                    loginController.setUser(username.text, password.text);
                     loginController.login();
                   },
                   style: ButtonStyle(

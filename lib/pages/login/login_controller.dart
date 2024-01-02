@@ -8,23 +8,12 @@ import '../../model/base_model.dart';
 import '../../model/login_model.dart';
 
 class LoginController extends GetxController {
-  // 声明一个RxString类型的变量用于存储用户名
-  RxString username = ''.obs;
-
-  // 声明一个RxString类型的变量用于存储密码
-  RxString password = ''.obs;
+  TextEditingController username = TextEditingController();
+  TextEditingController password = TextEditingController();
 
   RxBool isLogin = false.obs;
-
   RxBool loading = false.obs;
-
   RxString token = ''.obs;
-
-  // 定义一个方法用于更新用户名
-  void setUser(String username, String password) {
-    this.username.value = username;
-    this.password.value = password;
-  }
 
   void setLoading(bool value) {
     loading.value = value;
@@ -40,12 +29,22 @@ class LoginController extends GetxController {
     refresh();
   }
 
+  @override
+  void onInit() {
+    super.onInit();
+    List<String>? userModel = Cache.getInstance().getStringList('UserModel');
+    if (userModel != null && userModel.isNotEmpty) {
+      username.text = userModel[0];
+      password.text = userModel[1];
+    }
+  }
+
   void login() async {
     setLoading(true);
     UserLogin userLogin = UserLogin();
     userLogin
-        .addData('username', username.value)
-        .addData('password', password.value);
+        .addData('username', username.text)
+        .addData('password', password.text);
     var value = await Http.getInstance().fire(userLogin);
     BaseModel baseModel = BaseModel.fromJson(value);
     if (baseModel.code == 200) {
@@ -53,10 +52,11 @@ class LoginController extends GetxController {
       setToken(res.token);
       Http.getInstance().setToken(res.token);
       Cache.getInstance().setStringList(
-          'UserModel', [username.value, password.value, res.token]);
+          'UserModel', [username.text, password.text, res.token]);
       debugPrint('token ${res.token}');
       setLogin(true);
-      Get.toNamed('home');
+
+      Get.offAllNamed('home');
     } else {
       debugPrint(baseModel.message);
     }

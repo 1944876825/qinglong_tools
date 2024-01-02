@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
+import '../../common/config.dart';
+
 enum HttpMethod { get, post, delete, put }
 
 abstract class BaseRequest {
@@ -7,7 +9,7 @@ abstract class BaseRequest {
   var useHttps = false;
 
   String baseUrl() {
-    return "47.120.40.152:5700";
+    return apiUrl;
   }
 
   HttpMethod httpMethod();
