@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../db/cache.dart';
+import '../../db/cache/cache.dart';
 import '../../http/core/http.dart';
 import '../../widget/fun_card.dart';
 

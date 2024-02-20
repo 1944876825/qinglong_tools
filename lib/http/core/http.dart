@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qinglong_tools/http/core/http_adapter.dart';
 
-import '../../db/cache.dart';
+import '../../db/cache/cache.dart';
 import '../request/base_request.dart';
 import 'dio_adapter.dart';
 import 'http_error.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:qinglong_tools/db/cache.dart';
+import 'package:qinglong_tools/db/cache/cache.dart';
 
 import '../http/core/http.dart';
 import '../http/request/user_request.dart';

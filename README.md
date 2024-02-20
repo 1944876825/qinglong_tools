@@ -1,16 +1,8 @@
 # qinglong_tools
 
-A new Flutter project.
+为了移动端方便管理青龙面板而制作的此APP，但是遇到了一些麻烦，现在仅仅是半成品，尽情期待！
 
-## Getting Started
+## 部分功能截图
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![首页](docs/home.jpeg "首页")
+![定时任务页面](docs/work.jpeg "定时任务")

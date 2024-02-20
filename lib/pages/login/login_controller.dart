@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
-import '../../db/cache.dart';
+import '../../db/cache/cache.dart';
 import '../../http/core/http.dart';
 import '../../http/request/user_request.dart';
 import '../../model/base_model.dart';
